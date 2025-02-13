@@ -3,6 +3,10 @@ import jwt from 'jsonwebtoken';
 import { User, users } from '../models/user.js';
 import jwtConfig from '../config/jwt.config.js';
 
+/**
+ * 회원가입
+ * POST /signup
+ */
 const signup = async (req, res) => {
   try {
     const { username, password, nickname } = req.body;
@@ -17,11 +21,16 @@ const signup = async (req, res) => {
 
     const { password: _, ...userWithoutPassword } = newUser;
     res.status(201).json(userWithoutPassword);
-  } catch (error) {
+  } catch (err) {
+    console.error('Signup error:', err);
     res.status(500).json({ message: '회원가입 중 오류가 발생했습니다.' });
   }
 };
 
+/**
+ * 로그인
+ * POST /login
+ */
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -37,11 +46,12 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign({ username: user.username }, jwtConfig.secret, {
-      expiresIn: jwtConfig.expiresIn,
+      expiresIn: jwtConfig.accessToken.expiresIn,
     });
 
     res.json({ token });
-  } catch (error) {
+  } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ message: '로그인 중 오류가 발생했습니다.' });
   }
 };
