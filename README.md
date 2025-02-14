@@ -18,6 +18,14 @@
 
 [토큰 발행과 유효성 확인](docs/token-validation.md)
 
+### 테스트 환경 구성
+
+```bash
+yarn test jwt.test.js # 모든 테스트 실행
+yarn test -t "그룹명" # 특정 테스트 그룹 실행
+yarn test -t "테스트명" # 특정 테스트 실행
+```
+
 ## 유닛 테스트 작성
 
 [유닛 테스트 작성](docs/unit-test.md)
