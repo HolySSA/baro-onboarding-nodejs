@@ -2,7 +2,7 @@
 
 ## Express.js란?
 
-Express.js는 Node.js를 위한 빠르고 개방적인 웹 프레임워크입니다.
+Node.js를 위한 빠르고 개방적인 웹 프레임워크.
 
 ### 주요 특징
 
@@ -14,7 +14,7 @@ Express.js는 Node.js를 위한 빠르고 개방적인 웹 프레임워크입니
 
 ## Middleware란?
 
-미들웨어는 요청(request)과 응답(response) 사이에서 동작하는 함수입니다.
+요청(request)과 응답(response) 사이에서 동작하는 함수.
 
 ### 미들웨어의 특징
 
