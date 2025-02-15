@@ -14,7 +14,7 @@ const app = express();
 // CORS 설정
 app.use(
   cors({
-    origin: ['https://holyshin.shop', 'https://holyshin.store', 'http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://holyshin.shop:3000', 'https://holyshin.shop:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   }),
