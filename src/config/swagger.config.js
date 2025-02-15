@@ -10,6 +10,10 @@ const options = {
     },
     servers: [
       {
+        url: 'https://holyshin.shop',
+        description: '프로덕션 서버',
+      },
+      {
         url: 'http://localhost:3000',
         description: '개발 서버',
       },
