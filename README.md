@@ -34,7 +34,8 @@ yarn test -t "테스트명" # 특정 테스트 케이스 실행
 
 ### Refresh Token / Access Token 개선
 
-- 예상 시나리오
+```mermaid
+sequenceDiagram
   Client->>Server: 1. 로그인 요청
   Server->>Client: 2. Access Token + Refresh Token 발급
   (Client: Access Token & Refresh Token 저장)
@@ -46,3 +47,4 @@ yarn test -t "테스트명" # 특정 테스트 케이스 실행
   Server->>Client: 6. 새 Access Token 발급
   (Client: Access Token 저장)
   ...
+```
