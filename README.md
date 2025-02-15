@@ -36,35 +36,28 @@ yarn test -t "테스트명" # 특정 테스트 케이스 실행
 
 ```mermaid
 sequenceDiagram
-  Client->>Server: 1. 로그인 요청
-  Server->>Client: 2. Access Token + Refresh Token 발급
-  (Client: Access Token & Refresh Token 저장)
-  Client->>Server: 3. API 요청 with Access Token
-  Server->>Client: 4. 응답
-  ...
-  (Client: Access Token 만료)
-  Client->>Server: 5. 새로운 Access Token 요청 with Refresh Token
-  Server->>Client: 6. 새로운 Access Token 발급
-  (Client: Access Token 갱신)
-  ...
+    Client->>Server: 1. 로그인 요청
+    Server->>Client: 2. Access Token + Refresh Token 발급
+    Note over Client: Access Token & Refresh Token 저장
+    Client->>Server: 3. API 요청 with Access Token
+    Server->>Client: 4. 응답
+    Note over Client: Access Token 만료
+    Client->>Server: 5. 새로운 Access Token 요청 with Refresh Token
+    Server->>Client: 6. 새로운 Access Token 발급
 ```
 
-### 구현 시나리오
+#### 구현 시나리오
 
-#### 로그인 시 Refresh & Access Token 발급
+##### 1. 로그인 시 Refresh & Access Token 발급
 
 ```javascript
 // login 요청 시
-// ...
-
-// Access Token 발급 (짧은 유효기간)
 const accessToken = jwt.sign(
   { username: user.username },
   jwtConfig.secret,
   { expiresIn: '1h' }, // 1시간
 );
 
-// Refresh Token 발급 (긴 유효기간)
 const refreshToken = jwt.sign(
   { username: user.username },
   jwtConfig.secret,
@@ -77,14 +70,12 @@ res.json({
 });
 ```
 
-#### Refresh Token 사용 시나리오
+##### 2. Refresh Token 사용 시나리오
 
 ```javascript
 const refreshAccessToken = async (req, res) => {
   try {
     const { refreshToken } = req.body;
-
-    // ...
 
     // Refresh Token 검증
     const decoded = jwt.verify(refreshToken, jwtConfig.secret);
@@ -103,7 +94,7 @@ const refreshAccessToken = async (req, res) => {
 
 #### 개선 효과
 
-- 자주 로그인하지 않아도 됨.
-- Access Token 탈취 위험 감소.
-- 보안과 사용자 편의성 균형.
-- 서버 부하 감소 (매 요청마다 DB 조회 불필요).
+- **보안 강화**: Access Token의 짧은 유효기간으로 탈취 위험 감소
+- **사용자 편의성**: 잦은 로그인 없이 자동 갱신
+- **시스템 효율**: 서버 부하 감소 (매 요청마다 DB 조회 불필요)
+- **유연한 인증**: 토큰 기반의 확장 가능한 인증 구조
