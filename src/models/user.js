@@ -1,3 +1,5 @@
+import pool from '../config/database.config.js';
+
 class User {
   constructor(username, password, nickname) {
     this.username = username;
@@ -5,9 +7,19 @@ class User {
     this.nickname = nickname;
     this.authorities = [{ authorityName: 'ROLE_USER' }];
   }
+
+  static async create(user) {
+    const [result] = await pool.execute(
+      'INSERT INTO users (username, password, nickname) VALUES (?, ?, ?)',
+      [user.username, user.password, user.nickname],
+    );
+    return result;
+  }
+
+  static async findByUsername(username) {
+    const [rows] = await pool.execute('SELECT * FROM users WHERE username = ?', [username]);
+    return rows[0];
+  }
 }
 
-// 임시 데이터 저장소 (데이터베이스로 수정해야함)
-const users = new Map();
-
-export { User, users };
+export { User };

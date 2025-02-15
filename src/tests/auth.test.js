@@ -1,11 +1,11 @@
 import request from 'supertest';
 import app from '../app.js';
-import { users } from '../models/user.js';
+import pool from '../config/database.config.js';
 
 describe('Auth API Tests', () => {
-  // 각 테스트 전에 users Map을 초기화
-  beforeEach(() => {
-    users.clear();
+  // 각 테스트 전에 테이블 초기화
+  beforeEach(async () => {
+    await pool.execute('DELETE FROM users');
   });
 
   describe('POST /signup', () => {
@@ -84,13 +84,9 @@ describe('Auth API Tests', () => {
     });
   });
 
-  // 모든 테스트가 끝난 후 서버 종료
-  afterAll((done) => {
-    // app.close()를 호출할 수 있도록 app.js에서 server 객체를 export해야 함
-    if (app.close) {
-      app.close(done);
-    } else {
-      done();
-    }
+  // 모든 테스트 완료 후 연결 종료
+  afterAll(async () => {
+    await pool.end();
+    if (app.close) await app.close();
   });
 });

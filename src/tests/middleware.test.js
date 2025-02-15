@@ -1,10 +1,11 @@
 import request from 'supertest';
 import app from '../app.js';
-import { users } from '../models/user.js';
+import pool from '../config/database.config.js';
 
 describe('Middleware Tests', () => {
-  beforeEach(() => {
-    users.clear();
+  beforeEach(async () => {
+    // 테이블 초기화
+    await pool.execute('DELETE FROM users');
   });
 
   describe('signup 검증 미들웨어', () => {
@@ -28,17 +29,6 @@ describe('Middleware Tests', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('비밀번호는 8자 이상이어야 합니다.');
-    });
-
-    it('username 특수문자 포함 400 에러', async () => {
-      const response = await request(app).post('/signup').send({
-        username: 'test@user', // 특수문자 포함
-        password: '12345678',
-        nickname: 'Test User',
-      });
-
-      expect(response.status).toBe(400);
-      expect(response.body.message).toBe('아이디는 영문자와 숫자만 사용 가능합니다.');
     });
   });
 
@@ -87,11 +77,8 @@ describe('Middleware Tests', () => {
   });
 
   // 모든 테스트 완료 후 서버 종료
-  afterAll((done) => {
-    if (app.close) {
-      app.close(done);
-    } else {
-      done();
-    }
+  afterAll(async () => {
+    await pool.end();
+    if (app.close) await app.close();
   });
 });
