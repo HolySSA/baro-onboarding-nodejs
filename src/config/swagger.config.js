@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://holyshin.shop:3000',
+        url: 'http://holyshin.shop:3000',
         description: '프로덕션 서버',
       },
       {
