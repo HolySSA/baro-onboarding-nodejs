@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import { errorHandler } from './middleware/error.js';
@@ -9,6 +10,15 @@ import { specs } from './config/swagger.config.js';
 dotenv.config();
 
 const app = express();
+
+// CORS 설정
+app.use(
+  cors({
+    origin: ['https://holyshin.shop', 'https://holyshin.store', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  }),
+);
 
 // 기본 미들웨어
 app.use(express.json());
