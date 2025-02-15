@@ -33,12 +33,15 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// 테스트 환경이 아닐 때만 서버 시작
+if (process.env.NODE_ENV !== 'test') {
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 
-app.close = (callback) => {
-  server.close(callback);
-};
+  app.close = (callback) => {
+    server.close(callback);
+  };
+}
 
 export default app;
