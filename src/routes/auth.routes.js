@@ -73,7 +73,7 @@ router.post('/signup', validateSignupRequest, signup);
  *               properties:
  *                 token:
  *                   type: string
- *                   description: JWT 토큰
+ *                   description: JWT Access Token
  *       401:
  *         description: 인증 실패
  *       500:
