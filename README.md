@@ -18,12 +18,22 @@
 
 [토큰 발행과 유효성 확인](docs/token-validation.md)
 
-### 테스트 환경 구성
+## 테스트 실행 방법
 
 ```bash
-yarn test jwt.test.js # JWT 테스트 실행
-yarn test -t "그룹명" # 특정 테스트 그룹 실행
-yarn test -t "테스트명" # 특정 테스트 케이스 실행
+# 전체 테스트 실행
+yarn test
+
+# 특정 파일만 테스트
+yarn test auth.test.js
+yarn test jwt.test.js
+yarn test middleware.test.js
+
+# 특정 테스트 그룹만 실행
+yarn test -t "회원가입 테스트"
+
+# 테스트 커버리지 확인
+yarn test:coverage
 ```
 
 ## 유닛 테스트 작성
