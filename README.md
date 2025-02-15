@@ -43,8 +43,67 @@ sequenceDiagram
   Server->>Client: 4. 응답
   ...
   (Client: Access Token 만료)
-  Client->>Server: 5. 새 Access Token 요청 with Refresh Token
-  Server->>Client: 6. 새 Access Token 발급
-  (Client: Access Token 저장)
+  Client->>Server: 5. 새로운 Access Token 요청 with Refresh Token
+  Server->>Client: 6. 새로운 Access Token 발급
+  (Client: Access Token 갱신)
   ...
 ```
+
+### 구현 시나리오
+
+#### 로그인 시 Refresh & Access Token 발급
+
+```javascript
+// login 요청 시
+// ...
+
+// Access Token 발급 (짧은 유효기간)
+const accessToken = jwt.sign(
+  { username: user.username },
+  jwtConfig.secret,
+  { expiresIn: '1h' }, // 1시간
+);
+
+// Refresh Token 발급 (긴 유효기간)
+const refreshToken = jwt.sign(
+  { username: user.username },
+  jwtConfig.secret,
+  { expiresIn: '7d' }, // 7일
+);
+
+res.json({
+  accessToken,
+  refreshToken,
+});
+```
+
+#### Refresh Token 사용 시나리오
+
+```javascript
+const refreshAccessToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    // ...
+
+    // Refresh Token 검증
+    const decoded = jwt.verify(refreshToken, jwtConfig.secret);
+
+    // 새로운 Access Token 발급
+    const newAccessToken = jwt.sign({ username: decoded.username }, jwtConfig.secret, {
+      expiresIn: '1h',
+    });
+
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    res.status(401).json({ message: '토큰이 만료되었습니다.' });
+  }
+};
+```
+
+#### 개선 효과
+
+- 자주 로그인하지 않아도 됨.
+- Access Token 탈취 위험 감소.
+- 보안과 사용자 편의성 균형.
+- 서버 부하 감소 (매 요청마다 DB 조회 불필요).
